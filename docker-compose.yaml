@@ -1,0 +1,24 @@
+version: "3"
+services: # services are the containers that we want to run
+  mongo: # when i used "mongodb" instead of "mongo" it gave me some sort of error and connection was delayed due to repeated attempts to connect but for some reasons it worked with "mongo"
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes: # here we are mounting the volume to the container
+      - mymongo-data:/data/db # default path for mongodb data, diffeeent for different images
+  mongo-express:
+    image: mongo-express
+    #restart the container if it fails
+    restart: always  # this is used to restart the container if it fails, in this case it is used so that the container restarts if server is down
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongo
+volumes: # here we are defining the volume
+  mymongo-data:
+    driver: local 
